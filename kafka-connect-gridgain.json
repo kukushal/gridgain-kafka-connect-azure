@@ -1,0 +1,13 @@
+{
+  "name": "kafka-connect-gridgain",
+  "config": {
+    "topics": "cdr",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "gridgain.kafka.connect.azure.JsonToIgniteConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter.schemas.enable": "false",
+    "connector.class": "org.gridgain.kafka.sink.IgniteSinkConnector",
+    "igniteCfg": "/tmp/azure-gridgain/ignite-server.xml",
+    "errors.tolerance": "all"
+  }
+}

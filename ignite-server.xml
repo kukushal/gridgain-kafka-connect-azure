@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="peerClassLoadingEnabled" value="true"/>
+        <property name="workDirectory" value="/tmp/azure-gridgain/ignite"/>
+
+        <property name="cacheConfiguration">
+            <list>
+                <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                    <property name="name" value="cdr"/>
+                    <property name="sqlSchema" value="public"/>
+                    <property name="queryEntities">
+                        <list>
+                            <bean class="org.apache.ignite.cache.QueryEntity">
+                                <property name="tableName" value="cdr"/>
+                                <property name="keyType" value="java.lang.String"/>
+                                <property name="valueType" value="cdr"/>
+                                <property name="fields">
+                                    <map>
+                                        <entry key="SystemIdentity" value="java.lang.String"/>
+                                        <entry key="FileNum" value="java.lang.Long"/>
+                                        <entry key="SwitchNum" value="java.lang.Long"/>
+                                        <entry key="CallingNum" value="java.lang.Long"/>
+                                        <entry key="CallingIMSI" value="java.lang.String"/>
+                                        <entry key="CalledNum" value="java.lang.Long"/>
+                                        <entry key="CalledIMSI" value="java.lang.String"/>
+                                        <entry key="DateS" value="java.lang.String"/>
+                                        <entry key="TimeS" value="java.lang.String"/>
+                                        <entry key="CallPeriod" value="java.lang.String"/>
+                                        <entry key="CallingCellID" value="java.lang.Double"/>
+                                        <entry key="CalledCellID" value="java.lang.Double"/>
+                                        <entry key="ServiceType" value="java.lang.Long"/>
+                                        <entry key="FCIFlag" value="java.lang.Boolean"/>
+                                        <entry key="callrecTime" value="java.lang.String"/>
+                                    </map>
+                                </property>
+                                <property name="keyFields">
+                                    <set>
+                                        <value>CalledIMSI</value>
+                                    </set>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>127.0.0.1:47500</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <!-- Increased timeouts and no failure handling for debugging purposes -->
+        <property name="failureDetectionTimeout" value="600000"/>
+        <property name="clientFailureDetectionTimeout" value="600000"/>
+        <property name="failureHandler">
+            <bean class="org.apache.ignite.failure.NoOpFailureHandler"/>
+        </property>
+    </bean>
+</beans>
